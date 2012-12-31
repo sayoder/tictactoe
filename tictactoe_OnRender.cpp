@@ -1,4 +1,4 @@
-#include "capp.h"
+#include "tictactoe.h"
 
 void CApp::OnRender()
 {
@@ -6,12 +6,12 @@ void CApp::OnRender()
     {
         if(grid[i] == 1)
         {
-            SDL_Point myPoint = ConvertGridPos(i);
+            SDL_Point myPoint = ConvertGridPosToCoordinates(i);
             CSurface::OnDraw(Surf_Grid, Surf_X, myPoint.x, myPoint.y);
         }
         else if(grid[i] == 2)
         {
-            SDL_Point myPoint = ConvertGridPos(i);
+            SDL_Point myPoint = ConvertGridPosToCoordinates(i);
             CSurface::OnDraw(Surf_Grid, Surf_O, myPoint.x, myPoint.y);
         }
     }

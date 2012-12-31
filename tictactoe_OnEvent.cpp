@@ -1,4 +1,4 @@
-#include "capp.h"
+#include "tictactoe.h"
 
 void CApp::OnEvent(SDL_Event* Event)
 {
@@ -13,20 +13,32 @@ void CApp::FillGrid(int index)
 
 void CApp::ComputerTurn()
 {
-    grid[(int)RecursiveTurn(grid, 0, 2)] = 2;
+    move bestMove = RecursiveTurn(grid, 0, 2);
+    grid[(int)bestMove.index] = 2;
 }
 
-double CApp::RecursiveTurn(int hypo_grid[9], int depth, int whoseHypoTurn)
+move CApp::RecursiveTurn(int hypo_grid[9], int depth, int whoseHypoTurn)
 {
-    int winner = FindWinner(hypo_grid);
-    if(winner != 0)
+    winData hypoGameResult = FindWinner(hypo_grid);
+    move toReturn;
+    if(hypoGameResult.winner != 0)
     {
-        //seems like this should depend on whoseHypoTurn instead...
-        //but that makes the computer play horribly. I don't understand why.
-        if(winner == 1) return -1.0;
-        else if(winner == 2) return 1.0;
+        if(hypoGameResult.winner == 1)
+        {
+            toReturn.score = -100.0;
+            return toReturn;
+        }
+        else if(hypoGameResult.winner == 2)
+        {
+            toReturn.score = 100.0;
+            return toReturn;
+        }
     }
-    else if(!IsEmptySpace(hypo_grid)) return 0;
+    else if(!IsEmptySpace(hypo_grid))
+    {
+        toReturn.score = 0.0;
+        return toReturn;
+    }
 
     double totals_grid[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     int temp_grid[9];
@@ -40,7 +52,7 @@ double CApp::RecursiveTurn(int hypo_grid[9], int depth, int whoseHypoTurn)
         if(hypo_grid[i] == 0)
         {
             temp_grid[i] = whoseHypoTurn;
-            totals_grid[i] += (RecursiveTurn(temp_grid, depth+1, 2/whoseHypoTurn));
+            totals_grid[i] += (RecursiveTurn(temp_grid, depth+1, 2/whoseHypoTurn)).score / 5;
             temp_grid[i] = 0;
         }
     }
@@ -50,10 +62,9 @@ double CApp::RecursiveTurn(int hypo_grid[9], int depth, int whoseHypoTurn)
     bestMove.index = -1;
     if(whoseHypoTurn == 1) bestMove.score = 100000.0;
     if(whoseHypoTurn == 2) bestMove.score = -100000.0;
-    double gridSum = 0.0;
+
     for(int i = 0; i < 9; i++)
     {
-        gridSum += totals_grid[i] / 20;
         if((whoseHypoTurn == 2) && (totals_grid[i] > bestMove.score) && (hypo_grid[i] == 0)) 
         {
             bestMove.score = totals_grid[i];
@@ -70,25 +81,29 @@ double CApp::RecursiveTurn(int hypo_grid[9], int depth, int whoseHypoTurn)
     {
         for(int i = 0; i < 9; i++)
         {
+            bestMove.scoreGrid[i] = totals_grid[i];
             cout<<totals_grid[i]<<endl;
         }
         cout<<endl;
     }
-
-    if(depth == 0) return bestMove.index;
-    else return gridSum;
+    return bestMove;
 }
 
 void CApp::OnLButtonDown(int mX, int mY)
 {
+    //player turn
     int index = ConvertCoordsToGridPos(mX, mY);
     if(grid[index] == 0 && IsEmptySpace(grid))
     {
+        turnNumber++;
         FillGrid(index);
-        if(IsEmptySpace(grid))
-        {
-            ComputerTurn();
-        }
+    }
+
+    //computer turn
+    if(IsEmptySpace(grid))
+    {
+        turnNumber++;
+        ComputerTurn();
     }
 }
 

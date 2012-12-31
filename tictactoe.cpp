@@ -1,4 +1,4 @@
-#include "capp.h"
+#include "tictactoe.h"
 
 
 CApp::CApp()
@@ -13,6 +13,8 @@ CApp::CApp()
     {
         grid[i] = 0;
     }
+
+    turnNumber = 0;
 }
 
 bool CApp::IsEmptySpace(int ngrid[9])
@@ -29,7 +31,7 @@ bool CApp::IsEmptySpace(int ngrid[9])
     return FoundEmpty; 
 }
 
-int CApp::FindWinner(int ngrid[9])
+winData CApp::FindWinner(int ngrid[9])
 {
     int possibleWins[8][3] = {
         {0, 1, 2},
@@ -42,8 +44,9 @@ int CApp::FindWinner(int ngrid[9])
         {6, 4, 2}};
 
     int i = 0;
-    int foundWin = 0;
-    while(i < 8 && foundWin == 0)
+    int winner = 0;
+    int winType = 0;
+    while(i < 8 && winner == 0)
     {
         for(int j = 1; j < 3; j++)
         {
@@ -51,14 +54,18 @@ int CApp::FindWinner(int ngrid[9])
                 ngrid[possibleWins[i][1]] == j &&
                 ngrid[possibleWins[i][2]] == j)
             {
-                foundWin = j;
+                winner = j;
+                winType = i;
                 break;
             }
         }
         i++;
     }
     
-    return foundWin;
+    winData gameResult;
+    gameResult.winner = winner;
+    gameResult.winType = winType;
+    return gameResult;
 }
 
 int CApp::OnExecute()
@@ -91,7 +98,7 @@ int CApp::ConvertCoordsToGridPos(int mX, int mY)
     return (mX / 200) + (3 * (mY / 200));
 }
 
-SDL_Point CApp::ConvertGridPos(int pos)
+SDL_Point CApp::ConvertGridPosToCoordinates(int pos)
 {
     SDL_Point toReturn;
     int x, y;

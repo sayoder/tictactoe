@@ -1,4 +1,4 @@
-#include "capp.h"
+#include "tictactoe.h"
 #include "CSurface.h"
 
 bool CApp::OnInit()

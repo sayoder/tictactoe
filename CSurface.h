@@ -2,7 +2,7 @@
     #define _CSURFACE_H_
 
 #include <SDL/SDL.h>
-#include "capp.h"
+#include "tictactoe.h"
 #include <string>
 
 class CSurface

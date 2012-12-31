@@ -1,4 +1,4 @@
-#include "capp.h"
+#include "tictactoe.h"
 
 void CApp::OnCleanup()
 {

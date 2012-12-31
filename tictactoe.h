@@ -16,8 +16,16 @@ struct SDL_Point
 
 struct move
 {
-    double index;
+    int index;
     double score;
+    double scoreGrid[9];
+};
+
+struct winData
+{
+    //1 = human, 2 = computer, 0 = neither
+    int winner;
+    int winType;
 };
 
 class CApp : public CEvent
@@ -32,10 +40,11 @@ class CApp : public CEvent
         void OnLButtonDown(int mX, int mY);    
         void FillGrid(int index);
         void ComputerTurn();
-        double RecursiveTurn(int hypo_grid[9], int depth, int whoseHypoTurn);
-        int FindWinner(int ngrid[9]);
+        move RecursiveTurn(int hypo_grid[9], int depth, int whoseHypoTurn);
+        winData FindWinner(int ngrid[9]);
         bool IsEmptySpace(int ngrid[9]);
         int ConvertCoordsToGridPos(int mX, int mY);
+        int turnNumber;
 
     public:
         CApp();
@@ -46,7 +55,7 @@ class CApp : public CEvent
         void OnLoop();
         void OnRender();
         void OnCleanup();
-        SDL_Point ConvertGridPos(int pos);
+        SDL_Point ConvertGridPosToCoordinates(int pos);
 };
 
 #endif

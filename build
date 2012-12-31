@@ -1,2 +1,2 @@
-g++ -Wall -o capp capp.cpp capp_OnCleanup.cpp capp_OnEvent.cpp capp_OnInit.cpp capp_OnLoop.cpp capp_OnRender.cpp CSurface.cpp CEvent.cpp /lib/libSDLmain.a /lib/libSDL.so
-./capp
+g++ -Wall -o tictactoe tictactoe.cpp tictactoe_OnCleanup.cpp tictactoe_OnEvent.cpp tictactoe_OnInit.cpp tictactoe_OnLoop.cpp tictactoe_OnRender.cpp CSurface.cpp CEvent.cpp /lib/libSDLmain.a /lib/libSDL.so
+./tictactoe
